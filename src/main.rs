@@ -24,14 +24,17 @@ fn main() -> Result<()> {
     let r1_filepath = format!("{}_R1.fastq", cli.prefix);
     let r2_filepath = format!("{}_R2.fastq", cli.prefix);
     let results_filepath = format!("{}_counts.tsv", cli.prefix);
+    let constructs_filepath = format!("{}_construct.tsv", cli.prefix);
 
     eprintln!(">> Writing R1 to: {}", r1_filepath);
     eprintln!(">> Writing R2 to: {}", r2_filepath);
     eprintln!(">> Writing counts to: {}", results_filepath);
+    eprintln!(">> Writing counts to: {}", constructs_filepath);
 
     let mut f1_writer = File::create(&r1_filepath)?;
     let mut f2_writer = File::create(&r2_filepath)?;
     let mut results_writer = File::create(&results_filepath)?;
+    let mut constructs_writer = File::create(&constructs_filepath)?;
 
     let left_constant = Constant::new(cli.left_constant);
     let right_constant = Constant::new(cli.right_constant);
@@ -67,6 +70,11 @@ fn main() -> Result<()> {
     writeln!(results_writer, "{}\t{}", "CID", "count")?;
     for (cid, count) in table.iter() {
         writeln!(results_writer, "{}\t{}", cid, count)?;
+    }
+
+    writeln!(constructs_writer, "{}\t{}", "CID", "sequence")?;
+    for (idx, c) in constructs.iter().enumerate() {
+        writeln!(constructs_writer, "{}\t{}", idx, c.sequence())?;
     }
 
     Ok(())
