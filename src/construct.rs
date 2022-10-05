@@ -47,4 +47,8 @@ impl Construct {
         seq.push_str(&stagger_right);
         seq
     }
+
+    pub fn get_variable(&self, idx: usize) -> &Variable {
+        &self.variables[idx]
+    }
 }
