@@ -20,9 +20,18 @@ use variable::Variable;
 fn main() -> Result<()> {
     let cli = Cli::parse();
 
-    let mut f1_writer = File::create("reads_R1.fastq")?;
-    let mut f2_writer = File::create("reads_R2.fastq")?;
-    let mut results_writer = File::create("counts.tsv")?;
+    eprintln!("Params: {:#?}", cli);
+    let r1_filepath = format!("{}_R1.fastq", cli.prefix);
+    let r2_filepath = format!("{}_R2.fastq", cli.prefix);
+    let results_filepath = format!("{}_counts.tsv", cli.prefix);
+
+    eprintln!(">> Writing R1 to: {}", r1_filepath);
+    eprintln!(">> Writing R2 to: {}", r2_filepath);
+    eprintln!(">> Writing counts to: {}", results_filepath);
+
+    let mut f1_writer = File::create(&r1_filepath)?;
+    let mut f2_writer = File::create(&r2_filepath)?;
+    let mut results_writer = File::create(&results_filepath)?;
 
     let left_constant = Constant::new(cli.left_constant);
     let right_constant = Constant::new(cli.right_constant);

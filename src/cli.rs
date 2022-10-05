@@ -1,6 +1,6 @@
 use clap::Parser;
 
-#[derive(Parser)]
+#[derive(Parser, Debug)]
 #[clap(author, version, about)]
 pub struct Cli {
 
@@ -39,5 +39,9 @@ pub struct Cli {
     /// Length of variable (sgRNA) regions
     #[clap(short='v', long, default_value="23")]
     pub length_variable: usize,
+
+    /// Output prefix
+    #[clap(short, long, default_value="casgen")]
+    pub prefix: String,
 }
 
