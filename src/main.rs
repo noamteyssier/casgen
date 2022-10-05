@@ -55,8 +55,8 @@ fn main() -> Result<()> {
         let id = construct_id.sample(&mut rng);
         *table.entry(id).or_default() += 1;
         let sequence = constructs[id].staggered_sequence(cli.stagger);
-        let r1 = &sequence[0..250];
-        let r2 = &reverse_complement(&sequence)[0..250];
+        let r1 = &sequence[..250];
+        let r2 = &reverse_complement(&sequence)[..250];
         let r1_fq = fastq_rep(r1, id, idx);
         let r2_fq = fastq_rep(r2, id, idx);
 
