@@ -24,14 +24,17 @@ fn main() -> Result<()> {
     let r1_filepath = format!("{}_R1.fastq", cli.prefix);
     let r2_filepath = format!("{}_R2.fastq", cli.prefix);
     let results_filepath = format!("{}_counts.tsv", cli.prefix);
+    let sgrna_filepath = format!("{}_sgrna.tsv", cli.prefix);
 
     eprintln!(">> Writing R1 to: {}", r1_filepath);
     eprintln!(">> Writing R2 to: {}", r2_filepath);
     eprintln!(">> Writing counts to: {}", results_filepath);
+    eprintln!(">> Writing sgRNAs to: {}", sgrna_filepath);
 
     let mut f1_writer = File::create(&r1_filepath)?;
     let mut f2_writer = File::create(&r2_filepath)?;
     let mut results_writer = File::create(&results_filepath)?;
+    let mut sgrna_writer = File::create(&sgrna_filepath)?;
 
     let left_constant = Constant::new(cli.left_constant);
     let right_constant = Constant::new(cli.right_constant);
@@ -64,6 +67,10 @@ fn main() -> Result<()> {
         write!(f2_writer, "{}", r2_fq)?;
     }
 
+    /*
+     * Write Construct Count Table
+     */
+
     write!(results_writer, "{}\t{}", "CID", "count")?;
     for idx in 0..cli.num_variables {
         write!(results_writer, "\tv{}", idx)?;
@@ -76,6 +83,17 @@ fn main() -> Result<()> {
             write!(results_writer, "\t{}", constructs[*cid].get_variable(idx).sequence())?;
         }
         writeln!(results_writer)?;
+    }
+
+    /*
+     * Write Variable Table
+     */
+    for cid in 0..cli.num_constructs {
+        let c = &constructs[cid];
+        for vid in 0..cli.num_variables {
+            let v = c.get_variable(vid);
+            writeln!(sgrna_writer, "{}\t{}", v.sequence(), cid)?;
+        }
     }
 
     Ok(())
