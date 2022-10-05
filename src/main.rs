@@ -39,7 +39,7 @@ fn main() -> Result<()> {
     let left_constant = Constant::new(cli.left_constant);
     let right_constant = Constant::new(cli.right_constant);
     let spacers = Spacer::new_set(cli.length_spacers, cli.num_variables);
-    let variables = Variable::new_set(cli.length_spacers, cli.num_constructs * cli.num_variables);
+    let variables = Variable::new_set(cli.length_variable, cli.num_constructs * cli.num_variables);
     let constructs = (0..cli.num_constructs)
         .map(|idx| {
             Construct::new(
