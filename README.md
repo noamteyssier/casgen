@@ -21,3 +21,19 @@ region is the same length as well.
 ## Results
 
 The following sequences will
+
+## Usage
+
+### Installation
+
+```bash
+git clone https://github.com/noamteyssier/casgen
+cd casgen
+cargo install --path .
+```
+
+### Running
+
+```bash
+casgen
+```
