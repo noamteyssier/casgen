@@ -25,16 +25,19 @@ fn main() -> Result<()> {
     let r2_filepath = format!("{}_R2.fastq", cli.prefix);
     let results_filepath = format!("{}_counts.tsv", cli.prefix);
     let sgrna_filepath = format!("{}_sgrna.tsv", cli.prefix);
+    let dr_filepath = format!("{}_dr.txt", cli.prefix);
 
     eprintln!(">> Writing R1 to: {}", r1_filepath);
     eprintln!(">> Writing R2 to: {}", r2_filepath);
     eprintln!(">> Writing counts to: {}", results_filepath);
     eprintln!(">> Writing sgRNAs to: {}", sgrna_filepath);
+    eprintln!(">> Writing constant regions to: {}", dr_filepath);
 
     let mut f1_writer = File::create(&r1_filepath)?;
     let mut f2_writer = File::create(&r2_filepath)?;
     let mut results_writer = File::create(&results_filepath)?;
     let mut sgrna_writer = File::create(&sgrna_filepath)?;
+    let mut dr_writer = File::create(&dr_filepath)?;
 
     let left_constant = Constant::new(cli.left_constant);
     let right_constant = Constant::new(cli.right_constant);
@@ -99,6 +102,13 @@ fn main() -> Result<()> {
             let v = c.get_variable(vid);
             writeln!(sgrna_writer, "{}\t{}", v.sequence(), cid)?;
         }
+    }
+
+    /*
+     * Write Spacers table
+     */
+    for spacer in spacers {
+        writeln!(dr_writer, "{}", spacer.sequence())?;
     }
 
     Ok(())
