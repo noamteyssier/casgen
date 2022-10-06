@@ -100,7 +100,7 @@ fn main() -> Result<()> {
         let c = &constructs[cid];
         for vid in 0..cli.num_variables {
             let v = c.get_variable(vid);
-            writeln!(sgrna_writer, "{}\t{}", v.sequence(), cid)?;
+            writeln!(sgrna_writer, "{}\t{}\t{}", v.sequence(), cid, vid)?;
         }
     }
 
