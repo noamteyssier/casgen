@@ -7,12 +7,9 @@ pub struct Constant {
 impl Constant {
     pub fn new(size: usize) -> Self {
         let sequence = random_sequence(size);
-        Self {
-            sequence
-        }
+        Self { sequence }
     }
     pub fn sequence(&self) -> &str {
         &self.sequence
     }
 }
-

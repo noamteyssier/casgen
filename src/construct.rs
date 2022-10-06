@@ -1,6 +1,6 @@
-use rand::{distributions::Uniform, thread_rng, prelude::Distribution};
+use rand::{distributions::Uniform, prelude::Distribution, thread_rng};
 
-use crate::{constant::Constant, spacer::Spacer, variable::Variable, sequence::random_sequence};
+use crate::{constant::Constant, sequence::random_sequence, spacer::Spacer, variable::Variable};
 
 #[derive(Debug)]
 pub struct Construct {
@@ -11,19 +11,17 @@ pub struct Construct {
 }
 impl Construct {
     pub fn new(
-        left_constant: &Constant, 
+        left_constant: &Constant,
         right_constant: &Constant,
         spacers: &[Spacer],
         variables: &[Variable],
-        ) -> Self 
-    {
+    ) -> Self {
         Self {
             left_constant: left_constant.clone(),
             spacers: spacers.to_owned(),
             variables: variables.to_owned(),
             right_constant: right_constant.clone(),
         }
-
     }
 
     pub fn sequence(&self) -> String {

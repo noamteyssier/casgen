@@ -2,18 +2,18 @@ use anyhow::Result;
 use std::{collections::HashMap, fs::File, io::Write};
 
 mod cli;
-mod construct;
 mod constant;
+mod construct;
+mod sequence;
 mod spacer;
 mod variable;
-mod sequence;
 
 use clap::Parser;
 use cli::Cli;
 use constant::Constant;
 use construct::Construct;
-use rand::{thread_rng, distributions::Uniform, prelude::Distribution};
-use sequence::{reverse_complement, fastq_rep};
+use rand::{distributions::Uniform, prelude::Distribution, thread_rng};
+use sequence::{fastq_rep, reverse_complement};
 use spacer::Spacer;
 use variable::Variable;
 
@@ -46,8 +46,9 @@ fn main() -> Result<()> {
                 &left_constant,
                 &right_constant,
                 &spacers,
-                &variables[(idx * cli.num_variables)..((idx*cli.num_variables) + cli.num_variables)]
-                )
+                &variables
+                    [(idx * cli.num_variables)..((idx * cli.num_variables) + cli.num_variables)],
+            )
         })
         .collect::<Vec<Construct>>();
 
@@ -80,7 +81,11 @@ fn main() -> Result<()> {
     for (cid, count) in table.iter() {
         write!(results_writer, "{}\t{}", cid, count)?;
         for idx in 0..cli.num_variables {
-            write!(results_writer, "\t{}", constructs[*cid].get_variable(idx).sequence())?;
+            write!(
+                results_writer,
+                "\t{}",
+                constructs[*cid].get_variable(idx).sequence()
+            )?;
         }
         writeln!(results_writer)?;
     }

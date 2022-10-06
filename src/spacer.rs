@@ -7,17 +7,12 @@ pub struct Spacer {
 impl Spacer {
     pub fn new(size: usize) -> Self {
         let sequence = random_sequence(size);
-        Self {
-            sequence
-        }
+        Self { sequence }
     }
     pub fn new_set(size: usize, num: usize) -> Vec<Self> {
-        (0..num)
-            .map(|_| Self::new(size))
-            .collect()
+        (0..num).map(|_| Self::new(size)).collect()
     }
     pub fn sequence(&self) -> &str {
         &self.sequence
     }
 }
-
