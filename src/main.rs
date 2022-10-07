@@ -25,7 +25,7 @@ fn main() -> Result<()> {
     let r2_filepath = format!("{}_R2.fastq", cli.prefix);
     let results_filepath = format!("{}_counts.tsv", cli.prefix);
     let sgrna_filepath = format!("{}_sgrna.tsv", cli.prefix);
-    let dr_filepath = format!("{}_dr.txt", cli.prefix);
+    let dr_filepath = format!("{}_dr.tsv", cli.prefix);
 
     eprintln!(">> Writing R1 to: {}", r1_filepath);
     eprintln!(">> Writing R2 to: {}", r2_filepath);
@@ -107,8 +107,8 @@ fn main() -> Result<()> {
     /*
      * Write Spacers table
      */
-    for spacer in spacers {
-        writeln!(dr_writer, "{}", spacer.sequence())?;
+    for (idx, spacer) in spacers.iter().enumerate() {
+        writeln!(dr_writer, "{}\t{}", spacer.sequence(), idx)?;
     }
 
     Ok(())
