@@ -23,13 +23,19 @@ region is the same length as well.
 ### Installation
 
 ```bash
-git clone https://github.com/noamteyssier/casgen
-cd casgen
-cargo install --path .
+cargo install casgen
 ```
 
 ### Running
 
 ```bash
 casgen
+```
+
+### Running with Customizations
+
+Check out the help menu
+
+```bash
+casgen --help
 ```
