@@ -1,6 +1,6 @@
 [package]
 name = "casgen"
-version = "0.1.3"
+version = "0.1.4"
 edition = "2021"
 description = "A way to generate cas12 6-plex CRISPR sequences"
 repository = "https://github.com/noamteyssier/casgen"

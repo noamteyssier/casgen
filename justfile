@@ -5,5 +5,5 @@ run:
   casgen
 
 clean:
-  rm -rfv casgen*{fastq,tsv,txt}
+  rm -rfv casgen*{fastq,fasta,tsv,txt}
   

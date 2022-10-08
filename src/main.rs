@@ -21,18 +21,22 @@ fn main() -> Result<()> {
     let cli = Cli::parse();
 
     eprintln!("Params: {:#?}", cli);
+    let construct_filepath = format!("{}_constructs.fasta", cli.prefix);
     let r1_filepath = format!("{}_R1.fastq", cli.prefix);
     let r2_filepath = format!("{}_R2.fastq", cli.prefix);
     let results_filepath = format!("{}_counts.tsv", cli.prefix);
     let spacer_filepath = format!("{}_spacers.tsv", cli.prefix);
     let constant_filepath = format!("{}_constants.tsv", cli.prefix);
 
+
+    eprintln!(">> Writing constructs to: {}", construct_filepath);
     eprintln!(">> Writing R1 to: {}", r1_filepath);
     eprintln!(">> Writing R2 to: {}", r2_filepath);
     eprintln!(">> Writing Counts to: {}", results_filepath);
     eprintln!(">> Writing Spacers to: {}", spacer_filepath);
     eprintln!(">> Writing Constants to: {}", constant_filepath);
 
+    let mut construct_writer = File::create(&construct_filepath)?;
     let mut f1_writer = File::create(&r1_filepath)?;
     let mut f2_writer = File::create(&r2_filepath)?;
     let mut results_writer = File::create(&results_filepath)?;
@@ -69,6 +73,15 @@ fn main() -> Result<()> {
 
         write!(f1_writer, "{}", r1_fq)?;
         write!(f2_writer, "{}", r2_fq)?;
+    }
+
+    /*
+     * Write Constructs to file
+     */
+    for cid in 0..cli.num_constructs {
+        let sequence = constructs[cid].sequence();
+        let fa_rep = format!(">cid_{}\n{}\n", cid, sequence);
+        write!(construct_writer, "{}", fa_rep)?;
     }
 
     /*
