@@ -1,8 +1,12 @@
 [package]
 name = "casgen"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 description = "A way to generate cas12 6-plex CRISPR sequences"
+repository = "https://github.com/noamteyssier/casgen"
+license = "MIT"
+keywords = ["bioinformatics", "sequencing", "CRISPR", "cas12"]
+categories = ["science"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
