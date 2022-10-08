@@ -1,10 +1,10 @@
 use crate::sequence::random_sequence;
 
 #[derive(Debug, Clone)]
-pub struct Constant {
+pub struct Adapter {
     sequence: String,
 }
-impl Constant {
+impl Adapter {
     pub fn new(size: usize) -> Self {
         let sequence = random_sequence(size);
         Self { sequence }

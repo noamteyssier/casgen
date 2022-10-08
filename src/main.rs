@@ -2,7 +2,7 @@ use anyhow::Result;
 use std::{collections::HashMap, fs::File, io::Write};
 
 mod cli;
-mod constant;
+mod adapter;
 mod construct;
 mod sequence;
 mod spacer;
@@ -10,7 +10,7 @@ mod variable;
 
 use clap::Parser;
 use cli::Cli;
-use constant::Constant;
+use adapter::Adapter;
 use construct::Construct;
 use rand::{distributions::Uniform, prelude::Distribution, thread_rng};
 use sequence::{fastq_rep, reverse_complement};
@@ -24,30 +24,30 @@ fn main() -> Result<()> {
     let r1_filepath = format!("{}_R1.fastq", cli.prefix);
     let r2_filepath = format!("{}_R2.fastq", cli.prefix);
     let results_filepath = format!("{}_counts.tsv", cli.prefix);
-    let sgrna_filepath = format!("{}_sgrna.tsv", cli.prefix);
-    let dr_filepath = format!("{}_dr.tsv", cli.prefix);
+    let spacer_filepath = format!("{}_spacers.tsv", cli.prefix);
+    let constant_filepath = format!("{}_constants.tsv", cli.prefix);
 
     eprintln!(">> Writing R1 to: {}", r1_filepath);
     eprintln!(">> Writing R2 to: {}", r2_filepath);
-    eprintln!(">> Writing counts to: {}", results_filepath);
-    eprintln!(">> Writing sgRNAs to: {}", sgrna_filepath);
-    eprintln!(">> Writing constant regions to: {}", dr_filepath);
+    eprintln!(">> Writing Counts to: {}", results_filepath);
+    eprintln!(">> Writing Spacers to: {}", spacer_filepath);
+    eprintln!(">> Writing Constants to: {}", constant_filepath);
 
     let mut f1_writer = File::create(&r1_filepath)?;
     let mut f2_writer = File::create(&r2_filepath)?;
     let mut results_writer = File::create(&results_filepath)?;
-    let mut sgrna_writer = File::create(&sgrna_filepath)?;
-    let mut dr_writer = File::create(&dr_filepath)?;
+    let mut sgrna_writer = File::create(&spacer_filepath)?;
+    let mut dr_writer = File::create(&constant_filepath)?;
 
-    let left_constant = Constant::new(cli.left_constant);
-    let right_constant = Constant::new(cli.right_constant);
+    let left_adapter = Adapter::new(cli.left_adapter);
+    let right_adapter = Adapter::new(cli.right_adapter);
     let spacers = Spacer::new_set(cli.length_spacers, cli.num_variables);
     let variables = Variable::new_set(cli.length_variable, cli.num_constructs * cli.num_variables);
     let constructs = (0..cli.num_constructs)
         .map(|idx| {
             Construct::new(
-                &left_constant,
-                &right_constant,
+                &left_adapter,
+                &right_adapter,
                 &spacers,
                 &variables
                     [(idx * cli.num_variables)..((idx * cli.num_variables) + cli.num_variables)],

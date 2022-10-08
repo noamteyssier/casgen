@@ -25,11 +25,11 @@ pub struct Cli {
 
     /// Length of left-hand constant adapter region
     #[clap(short = 'c', long, default_value = "23")]
-    pub left_constant: usize,
+    pub left_adapter: usize,
 
     /// Length of right-hand constant adapter region
     #[clap(short = 'C', long, default_value = "53")]
-    pub right_constant: usize,
+    pub right_adapter: usize,
 
     /// Length of spacer regions
     #[clap(short = 's', long, default_value = "19")]

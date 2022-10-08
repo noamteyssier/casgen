@@ -1,18 +1,18 @@
 use rand::{distributions::Uniform, prelude::Distribution, thread_rng};
 
-use crate::{constant::Constant, sequence::random_sequence, spacer::Spacer, variable::Variable};
+use crate::{adapter::Adapter, sequence::random_sequence, spacer::Spacer, variable::Variable};
 
 #[derive(Debug)]
 pub struct Construct {
-    left_constant: Constant,
+    left_constant: Adapter,
     spacers: Vec<Spacer>,
     variables: Vec<Variable>,
-    right_constant: Constant,
+    right_constant: Adapter,
 }
 impl Construct {
     pub fn new(
-        left_constant: &Constant,
-        right_constant: &Constant,
+        left_constant: &Adapter,
+        right_constant: &Adapter,
         spacers: &[Spacer],
         variables: &[Variable],
     ) -> Self {
