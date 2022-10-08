@@ -5,7 +5,7 @@ mod cli;
 mod adapter;
 mod construct;
 mod sequence;
-mod spacer;
+mod constant;
 mod variable;
 
 use clap::Parser;
@@ -14,7 +14,7 @@ use adapter::Adapter;
 use construct::Construct;
 use rand::{distributions::Uniform, prelude::Distribution, thread_rng};
 use sequence::{fastq_rep, reverse_complement};
-use spacer::Spacer;
+use constant::Constant;
 use variable::Variable;
 
 fn main() -> Result<()> {
@@ -37,18 +37,18 @@ fn main() -> Result<()> {
     let mut f2_writer = File::create(&r2_filepath)?;
     let mut results_writer = File::create(&results_filepath)?;
     let mut sgrna_writer = File::create(&spacer_filepath)?;
-    let mut dr_writer = File::create(&constant_filepath)?;
+    let mut constant_writer = File::create(&constant_filepath)?;
 
     let left_adapter = Adapter::new(cli.left_adapter);
     let right_adapter = Adapter::new(cli.right_adapter);
-    let spacers = Spacer::new_set(cli.length_spacers, cli.num_variables);
+    let constants = Constant::new_set(cli.length_constants, cli.num_variables);
     let variables = Variable::new_set(cli.length_variable, cli.num_constructs * cli.num_variables);
     let constructs = (0..cli.num_constructs)
         .map(|idx| {
             Construct::new(
                 &left_adapter,
                 &right_adapter,
-                &spacers,
+                &constants,
                 &variables
                     [(idx * cli.num_variables)..((idx * cli.num_variables) + cli.num_variables)],
             )
@@ -105,10 +105,10 @@ fn main() -> Result<()> {
     }
 
     /*
-     * Write Spacers table
+     * Write Constants table
      */
-    for (idx, spacer) in spacers.iter().enumerate() {
-        writeln!(dr_writer, "{}\t{}", spacer.sequence(), idx)?;
+    for (idx, constant) in constants.iter().enumerate() {
+        writeln!(constant_writer, "{}\t{}", constant.sequence(), idx)?;
     }
 
     Ok(())

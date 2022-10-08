@@ -1,11 +1,11 @@
 use rand::{distributions::Uniform, prelude::Distribution, thread_rng};
 
-use crate::{adapter::Adapter, sequence::random_sequence, spacer::Spacer, variable::Variable};
+use crate::{adapter::Adapter, sequence::random_sequence, constant::Constant, variable::Variable};
 
 #[derive(Debug)]
 pub struct Construct {
     left_constant: Adapter,
-    spacers: Vec<Spacer>,
+    constants: Vec<Constant>,
     variables: Vec<Variable>,
     right_constant: Adapter,
 }
@@ -13,12 +13,12 @@ impl Construct {
     pub fn new(
         left_constant: &Adapter,
         right_constant: &Adapter,
-        spacers: &[Spacer],
+        constants: &[Constant],
         variables: &[Variable],
     ) -> Self {
         Self {
             left_constant: left_constant.clone(),
-            spacers: spacers.to_owned(),
+            constants: constants.to_owned(),
             variables: variables.to_owned(),
             right_constant: right_constant.clone(),
         }
@@ -27,8 +27,8 @@ impl Construct {
     pub fn sequence(&self) -> String {
         let mut s = String::with_capacity(500);
         s.push_str(self.left_constant.sequence());
-        for idx in 0..self.spacers.len() {
-            s.push_str(self.spacers[idx].sequence());
+        for idx in 0..self.constants.len() {
+            s.push_str(self.constants[idx].sequence());
             s.push_str(self.variables[idx].sequence());
         }
         s.push_str(self.right_constant.sequence());

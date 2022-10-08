@@ -33,7 +33,7 @@ pub struct Cli {
 
     /// Length of spacer regions
     #[clap(short = 's', long, default_value = "19")]
-    pub length_spacers: usize,
+    pub length_constants: usize,
 
     /// Length of variable (sgRNA) regions
     #[clap(short = 'v', long, default_value = "23")]
