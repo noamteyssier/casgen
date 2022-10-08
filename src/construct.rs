@@ -1,12 +1,12 @@
 use rand::{distributions::Uniform, prelude::Distribution, thread_rng};
 
-use crate::{adapter::Adapter, sequence::random_sequence, constant::Constant, variable::Variable};
+use crate::{adapter::Adapter, sequence::random_sequence, constant::Constant, spacer::Spacer};
 
 #[derive(Debug)]
 pub struct Construct {
     left_constant: Adapter,
     constants: Vec<Constant>,
-    variables: Vec<Variable>,
+    spacers: Vec<Spacer>,
     right_constant: Adapter,
 }
 impl Construct {
@@ -14,12 +14,12 @@ impl Construct {
         left_constant: &Adapter,
         right_constant: &Adapter,
         constants: &[Constant],
-        variables: &[Variable],
+        spacers: &[Spacer],
     ) -> Self {
         Self {
             left_constant: left_constant.clone(),
             constants: constants.to_owned(),
-            variables: variables.to_owned(),
+            spacers: spacers.to_owned(),
             right_constant: right_constant.clone(),
         }
     }
@@ -29,7 +29,7 @@ impl Construct {
         s.push_str(self.left_constant.sequence());
         for idx in 0..self.constants.len() {
             s.push_str(self.constants[idx].sequence());
-            s.push_str(self.variables[idx].sequence());
+            s.push_str(self.spacers[idx].sequence());
         }
         s.push_str(self.right_constant.sequence());
         s
@@ -46,7 +46,7 @@ impl Construct {
         seq
     }
 
-    pub fn get_variable(&self, idx: usize) -> &Variable {
-        &self.variables[idx]
+    pub fn get_spacer(&self, idx: usize) -> &Spacer {
+        &self.spacers[idx]
     }
 }

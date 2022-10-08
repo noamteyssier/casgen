@@ -6,7 +6,7 @@ mod adapter;
 mod construct;
 mod sequence;
 mod constant;
-mod variable;
+mod spacer;
 
 use clap::Parser;
 use cli::Cli;
@@ -15,7 +15,7 @@ use construct::Construct;
 use rand::{distributions::Uniform, prelude::Distribution, thread_rng};
 use sequence::{fastq_rep, reverse_complement};
 use constant::Constant;
-use variable::Variable;
+use spacer::Spacer;
 
 fn main() -> Result<()> {
     let cli = Cli::parse();
@@ -41,16 +41,16 @@ fn main() -> Result<()> {
 
     let left_adapter = Adapter::new(cli.left_adapter);
     let right_adapter = Adapter::new(cli.right_adapter);
-    let constants = Constant::new_set(cli.length_constants, cli.num_variables);
-    let variables = Variable::new_set(cli.length_variable, cli.num_constructs * cli.num_variables);
+    let constants = Constant::new_set(cli.length_constants, cli.num_spacers);
+    let spacers = Spacer::new_set(cli.length_spacer, cli.num_constructs * cli.num_spacers);
     let constructs = (0..cli.num_constructs)
         .map(|idx| {
             Construct::new(
                 &left_adapter,
                 &right_adapter,
                 &constants,
-                &variables
-                    [(idx * cli.num_variables)..((idx * cli.num_variables) + cli.num_variables)],
+                &spacers
+                    [(idx * cli.num_spacers)..((idx * cli.num_spacers) + cli.num_spacers)],
             )
         })
         .collect::<Vec<Construct>>();
@@ -76,30 +76,30 @@ fn main() -> Result<()> {
      */
 
     write!(results_writer, "{}\t{}", "CID", "count")?;
-    for idx in 0..cli.num_variables {
+    for idx in 0..cli.num_spacers {
         write!(results_writer, "\tv{}", idx)?;
     }
     writeln!(results_writer)?;
 
     for (cid, count) in table.iter() {
         write!(results_writer, "{}\t{}", cid, count)?;
-        for idx in 0..cli.num_variables {
+        for idx in 0..cli.num_spacers {
             write!(
                 results_writer,
                 "\t{}",
-                constructs[*cid].get_variable(idx).sequence()
+                constructs[*cid].get_spacer(idx).sequence()
             )?;
         }
         writeln!(results_writer)?;
     }
 
     /*
-     * Write Variable Table
+     * Write Spacer Table
      */
     for cid in 0..cli.num_constructs {
         let c = &constructs[cid];
-        for vid in 0..cli.num_variables {
-            let v = c.get_variable(vid);
+        for vid in 0..cli.num_spacers {
+            let v = c.get_spacer(vid);
             writeln!(sgrna_writer, "{}\t{}\t{}", v.sequence(), cid, vid)?;
         }
     }

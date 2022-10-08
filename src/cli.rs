@@ -19,9 +19,9 @@ pub struct Cli {
     #[clap(short = 'S', long, default_value = "8")]
     pub stagger: usize,
 
-    /// Number of variables
+    /// Number of spacers
     #[clap(long, default_value = "6")]
-    pub num_variables: usize,
+    pub num_spacers: usize,
 
     /// Length of left-hand constant adapter region
     #[clap(short = 'c', long, default_value = "23")]
@@ -35,9 +35,9 @@ pub struct Cli {
     #[clap(short = 's', long, default_value = "19")]
     pub length_constants: usize,
 
-    /// Length of variable (sgRNA) regions
+    /// Length of spacer (sgRNA) regions
     #[clap(short = 'v', long, default_value = "23")]
-    pub length_variable: usize,
+    pub length_spacer: usize,
 
     /// Output prefix
     #[clap(short, long, default_value = "casgen")]
